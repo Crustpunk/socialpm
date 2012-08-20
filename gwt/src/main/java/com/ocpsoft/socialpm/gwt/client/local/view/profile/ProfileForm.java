@@ -16,75 +16,63 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.ocpsoft.socialpm.model.user.Profile;
 
 @Templated
-public class ProfileForm extends Composite
-{
-   @Inject
-   @DataField
-   private TextBox username;
+public class ProfileForm extends Composite {
 
-   @Inject
-   @DataField
-   private TextBox email;
+    @Inject
+    @DataField
+    private TextBox username;
+    @Inject
+    @DataField
+    private TextBox email;
+    @Inject
+    @DataField
+    private TextArea bio;
+    @Inject
+    @DataField
+    private PasswordTextBox password;
+    @Inject
+    @DataField("emailPrivacy")
+    private CheckBox emailPrivacy;
+    @Inject
+    @DataField
+    private Button submit;
+    @Inject
+    @DataField
+    private Button cancel;
+    @Inject
+    private DataBinder<Profile> binder;
 
-   @Inject
-   @DataField
-   private TextArea bio;
+    public void setProfile(Profile profile) {
+        if (binder != null) {
+            binder.unbind();
+        }
 
-   @Inject
-   @DataField
-   private PasswordTextBox password;
+        //binder = new DataBinder<Profile>(profile, InitialState.FROM_MODEL);
+        binder = DataBinder.forModel(profile, InitialState.FROM_MODEL);
+        binder.bind(bio, "bio");
+        binder.bind(username, "username");
+        binder.bind(email, "email");
+        binder.bind(password, "password");
+        binder.bind(emailPrivacy, "emailSecret");
+    }
 
-   @Inject
-   @DataField("emailPrivacy")
-   private CheckBox emailPrivacy;
+    public void clear() {
+        username.setText("");
+        password.setText("");
+    }
 
-   @Inject
-   @DataField
-   private Button submit;
+    /*
+     * Getters & Setters
+     */
+    public Button getSubmit() {
+        return submit;
+    }
 
-   @Inject
-   @DataField
-   private Button cancel;
+    public Button getCancel() {
+        return cancel;
+    }
 
-   @Inject
-   private DataBinder<Profile> binder;
-
-   public void setProfile(Profile profile)
-   {
-      if (binder != null)
-         binder.unbind();
-
-      binder = new DataBinder<Profile>(profile,
-               InitialState.FROM_MODEL);
-      binder.bind(bio, "bio");
-      binder.bind(username, "username");
-      binder.bind(email, "email");
-      binder.bind(password, "password");
-      binder.bind(emailPrivacy, "emailSecret");
-   }
-
-   public void clear()
-   {
-      username.setText("");
-      password.setText("");
-   }
-
-   /*
-    * Getters & Setters
-    */
-
-   public Button getSubmit()
-   {
-      return submit;
-   }
-
-   public Button getCancel()
-   {
-      return cancel;
-   }
-
-   public Profile getProfile()
-   {
-      return binder.getModel();
-   }
+    public Profile getProfile() {
+        return binder.getModel();
+    }
 }
